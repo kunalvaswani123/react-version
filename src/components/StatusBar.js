@@ -4,11 +4,13 @@ import { search, modal } from "../redux";
 
 function StatusBar () {
     const user = useSelector(state => state.log.user);
+    const imgData = useSelector(state => state.log.imgData);
     const postForm = useRef(null);
     const resetPostForm = useRef(null);
     const modalId = useRef(null);
     const [styleModal, setStyleModal] = useState('none');
     const dispatch = useDispatch();
+    const userImage = 'data:image/png;base64,' + imgData;
     const handleModal = () => {
         dispatch(modal());
         setStyleModal('block');
@@ -45,7 +47,7 @@ function StatusBar () {
         <div>
             <div className="status">
                 <div className="put">
-                    <img src={require("../images/user.png")} id="userimage" alt="userimage" />
+                    <img src={userImage} id="userimage" alt="userimage" />
                     <input onClick={handleModal} type="text" placeholder="What's on your mind, User?" id="statusbar" />
                 </div>
                 <hr />

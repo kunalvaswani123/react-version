@@ -26,6 +26,13 @@ db.once('open', function() {
     });
 });
 
+function sendUser (user, res) {
+    db.collection('users').find({"name": user}).toArray((err, result) => {
+        if (err) return console.log(err);
+        res.send(result);
+    });
+}
+
 app.post('/postData', upload.single('myfile'), function (req, res, next) {
     let imgData;
     if (req.file == undefined)
@@ -47,6 +54,40 @@ app.post('/postData', upload.single('myfile'), function (req, res, next) {
     db.collection('posts').insertOne(newDoc, (err, result) => {
         if (err) return console.log(err);
         res.send(result);
+    });
+});
+
+app.post('/addUser', upload.single('myfile'), function (req, res, next) {
+    let imgPath;
+    if (req.file == undefined)
+        imgPath = "src/images/user.png";
+    else
+        imgPath = req.file.path;
+    let imgData = fs.readFileSync(imgPath);
+    var newDoc = {
+        name: req.query.user,
+        img: { 
+            data: imgData, 
+            contentType: 'image/png' 
+        }
+    };
+    db.collection('users').find({"name": req.query.user}).toArray((err, result) => {
+        if (err) return console.log(err);
+        if (result.length) {
+            if (req.query.update == "yes") {
+                db.collection('users').updateOne({"name": req.query.user}, {$set: newDoc}, (err, result) => {
+                    if (err) return console.log(err);
+                    res.send(result);
+                });
+            }
+            else sendUser(req.query.user, res);
+        }
+        else {
+            db.collection('users').insertOne(newDoc, (err, result) => {
+                if (err) return console.log(err);
+                res.send(result);
+            });
+        }
     });
 });
 
@@ -90,4 +131,8 @@ app.get('/givePostData', (req, res) => {
         if (err) return console.log(err);
         res.send(result);
     });
+});
+
+app.get('/getUser', (req, res) => {
+    sendUser(req.query.user, res);
 });

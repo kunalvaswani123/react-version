@@ -1,14 +1,36 @@
 import React, { useState } from "react";
 import logo from '../images/fb.jpg';
 import { useDispatch } from "react-redux";
-import { logIn } from "../redux";
+import { logIn, image } from "../redux";
+import { fetchUser } from "./service";
 
 function Login () {
     const dispatch = useDispatch();
     const [user, setUser] = useState('');
     const handleSubmit = () => {
-        dispatch(logIn(user));
-        window.location.replace("/");
+        let postUrl = "http://localhost:8000/addUser/?update=no&user=" + user;
+        const postObject = {
+            method: 'POST',
+            body: null
+        };
+        fetch(postUrl, postObject)
+            .then(function(response) {
+                if (response.ok) {
+                    fetchUser(user)
+                        .then(function(response) {
+                            console.log('data:image/png;base64,' + response[0].img.data);
+                            dispatch(image(response[0].img.data));
+                            dispatch(logIn(user));
+                            window.location.replace("/");
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            }); 
     }
     const handleChange = (event) => {   
         setUser(event.target.value);

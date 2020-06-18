@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT } from "./userTypes";
+import { LOG_IN, LOG_OUT, IMAGE } from "./userTypes";
 
 export const logIn = (userName) => {
     return {
@@ -10,5 +10,12 @@ export const logIn = (userName) => {
 export const logOut = () => {
     return {
         type: LOG_OUT
+    }
+}
+
+export const image = (data) => {
+    return {
+        type: IMAGE,
+        data: data
     }
 }

@@ -1,7 +1,8 @@
-import { LOG_IN, LOG_OUT } from "./userTypes";
+import { LOG_IN, LOG_OUT, IMAGE } from "./userTypes";
 
 const initialState = {
-    user: ''
+    user: '',
+    imgData: ''
 }
 
 const userReducer = (state = initialState, action) => {
@@ -13,6 +14,10 @@ const userReducer = (state = initialState, action) => {
         case LOG_OUT: return {
             ...state,
             user: ''
+        }
+        case IMAGE: return {
+            ...state, 
+            imgData: action.data
         }
         default: return state;
     }

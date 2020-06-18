@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { fetchPostData } from "./service";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPostData, fetchUser } from "./service";
 import SinglePost from "./SinglePost";
+import { image } from "../redux"; 
 
 function Profile () {
+    const dispatch = useDispatch();
+    const postForm = useRef(null);
+    const profileSrc= useRef(null);
+    const resetPostForm = useRef(null);
     const user = useSelector(state => state.log.user);
+    const imgData = useSelector(state => state.log.imgData);
     const [components, setComponents] = useState([]);
+    const [userImage, setUserImage] = useState('data:image/png;base64,' + imgData);
     useEffect(() => {
         fetchPostData("", user)
             .then(function(response) {
@@ -31,6 +38,32 @@ function Profile () {
                 console.log(error);
             });
     }, [user]);
+    const submitButton = (e) => {
+        e.preventDefault();
+        let postUrl = "http://localhost:8000/addUser/?update=yes&user=" + user;
+        let formData = new FormData(postForm.current);
+        const postObject = {
+            method: 'POST',
+            body: formData
+        };
+        fetch(postUrl, postObject)
+            .then(function(response) {
+                if (response.ok) {
+                    resetPostForm.current.click();
+                    fetchUser(user)
+                        .then(function(response) {
+                            dispatch(image(response[0].img.data));
+                            setUserImage('data:image/png;base64,' + response[0].img.data);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                }        
+            })
+            .catch(function(error) {
+                console.log(error);
+            }); 
+    }
     return (
         <div>
             <div className="cover-photo">
@@ -38,16 +71,22 @@ function Profile () {
             </div>
             <div className="profile-photo">
                 <img 
-                    src={require("../images/user.png")} 
+                    src={userImage} 
                     className="image-in-div" 
                     style={{borderRadius: '50%'}} 
                     alt="profileimage"
+                    ref={profileSrc}
                 />
             </div>
             <div className="user-text">
                 <span>{user}</span>
             </div>
             <div className="content" style={{paddingTop: '0vw'}}>
+                <form id="postForm" ref={postForm}>
+                    <input type="file" id="myfile" name="myfile" />
+                    <input type="submit" id="submitPost" onClick={submitButton} />
+                    <input type="reset" value="reset" style={{display: 'none'}} ref={resetPostForm} />
+                </form>
                 <div className="posts">
                     {components}
                 </div>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import userImage from "../images/user.png";
 import Shortcut from "./Shortcut";
 import { shortcutData } from "./data/shortcuts";
 import { fetchGroupData } from "./service";
 import Group from "./Group";
+import { useSelector } from "react-redux";
 
 function LeftNavigation () {
+    const user = useSelector(state => state.log.user);
+    const imgData = useSelector(state => state.log.imgData);
     const shortcutComponents = shortcutData.map(element => <Shortcut key={element.id} act={element.act} add={element.add} />);
     const [groups, setGroups] = useState([]);
     const [loaded, setLoaded] = useState(null);
@@ -14,6 +16,7 @@ function LeftNavigation () {
         down: 'block',
         load: 'none'
     });
+    const userImage = 'data:image/png;base64,' + imgData;
     useEffect(() => {
         fetchGroupData(4)
             .then(function(response) {
@@ -69,7 +72,7 @@ function LeftNavigation () {
             <div className="groups">
                 <div className="group">
                     <img src={userImage} id="userimage" alt="userimage" />
-                    <span className="act">User</span>
+                    <span className="act">{user}</span>
                 </div>
                 <div className="list">
                     {groups}

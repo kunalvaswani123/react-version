@@ -22,3 +22,15 @@ export async function fetchPostData (stringToMatch, userToMatch) {
         console.log("Error in fetchPostData: ", err);
     }
 }
+
+export async function fetchUser (user) {
+    try {
+        let query = '?user=' + user;
+        const response = await fetch('http://localhost:8000/getUser/' + query, {method: 'GET'});
+        const data = await response.json();
+        return data;
+    }
+    catch (err) {
+        console.log("Error in fetchUser: ", err);
+    }    
+}
