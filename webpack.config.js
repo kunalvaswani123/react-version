@@ -6,7 +6,11 @@ module.exports = {
     devtool: 'inline-source-map',
     entry: './src/index.js',
     output: {
-        filename: 'bundle.js'
+        filename: 'bundle.js',
+        publicPath: '/'
+    },
+    devServer: {
+        historyApiFallback: true,
     },
     module: {
         rules: [

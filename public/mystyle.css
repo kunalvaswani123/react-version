@@ -947,3 +947,36 @@ ul {
 .user-text span {
     font-size: 3em;
 }
+#profilePicture {
+    display: inline-block;
+    padding: 2vw;
+    margin-left: 8vw;
+}
+#profilePicture button {
+    margin: 1vw;
+    background-color: rgb(50, 50, 50);
+    border-radius: 2vw;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+} 
+#profilePicture input {
+    margin: 1vw;
+}
+#profilePicture input[type=submit] {
+    background-color: rgb(50, 50, 50);
+    border-radius: 2vw;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}

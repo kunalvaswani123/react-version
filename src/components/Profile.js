@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPostData, fetchUser } from "./service";
 import SinglePost from "./SinglePost";
-import { image } from "../redux"; 
+import { image, addImage, undo, clearUndo } from "../redux"; 
 
 function Profile () {
     const dispatch = useDispatch();
@@ -14,6 +14,12 @@ function Profile () {
     const imgData = useSelector(state => state.log.imgData);
     const [components, setComponents] = useState([]);
     const [userImage, setUserImage] = useState('data:image/png;base64,' + imgData);
+    useEffect(() => {
+        dispatch(clearUndo());
+    }, [])
+    useEffect(() => {
+        setUserImage('data:image/png;base64,' + imgData);
+    }, [imgData]);
     useEffect(() => {
         fetchPostData("", user)
             .then(function(response) {
@@ -54,6 +60,7 @@ function Profile () {
                     resetPostForm.current.click();
                     fetchUser(user)
                         .then(function(response) {
+                            dispatch(addImage(imgData));
                             dispatch(image(response[0].img.data));
                             setUserImage('data:image/png;base64,' + response[0].img.data);
                         })
@@ -66,6 +73,10 @@ function Profile () {
                 console.log(error);
             }); 
         }
+    }
+    const handleUndo = (e) => {
+        e.preventDefault();
+        dispatch(undo());
     }
     return (
         <div>
@@ -85,7 +96,8 @@ function Profile () {
                 <span>{user}</span>
             </div>
             <div className="content" style={{paddingTop: '0vw'}}>
-                <form id="postForm" ref={postForm}>
+                <form id="profilePicture" ref={postForm}>
+                    <button onClick={handleUndo}><i className="fa fa-undo"></i></button>
                     <input type="file" id="myfile" name="myfile" ref={fileForm} />
                     <input type="submit" id="submitPost" onClick={submitButton} />
                     <input type="reset" value="reset" style={{display: 'none'}} ref={resetPostForm} />

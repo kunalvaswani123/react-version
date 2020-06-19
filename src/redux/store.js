@@ -18,6 +18,7 @@ const loadFromLocalStorage = () => {
         if (serializedState === null) return undefined;
         const jsonState = JSON.parse(serializedState)
         jsonState.search.modal = false;
+        jsonState.log.undoData = [];
         return jsonState;
     }
     catch(e) {
