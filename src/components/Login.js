@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from '../images/fb.jpg';
 import { useSelector, useDispatch } from "react-redux";
-import { logIn, image } from "../redux";
+import { logIn, uploadImage } from "../redux";
 import { fetchUser } from "./service";
 
 function Login () {
@@ -19,8 +19,8 @@ function Login () {
                 if (response.ok) {
                     fetchUser(user)
                         .then(function(response) {
-                            dispatch(image(response[0].img.data));
-                            dispatch(logIn(user));
+                            dispatch(uploadImage(response[0].img.data));
+                            dispatch(logIn({userName: user, postsByUser: response[0].posts}));
                             window.location.replace("/");
                         })
                         .catch(function(error) {

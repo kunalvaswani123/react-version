@@ -1,9 +1,10 @@
-import { LOG_IN, LOG_OUT, IMAGE, ADDIMAGE, UNDO, CLEARUNDO } from "./userTypes";
+import { LOG_IN, LOG_OUT, UPLOADIMAGE, ADDIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDLIKE } from "./userTypes";
 
-export const logIn = (userName) => {
+export const logIn = (info) => {
     return {
         type: LOG_IN,
-        user: userName
+        user: info.userName,
+        posts: info.postsByUser
     }
 }
 
@@ -13,17 +14,24 @@ export const logOut = () => {
     }
 }
 
-export const image = (data) => {
+export const uploadImage = (data) => {
     return {
-        type: IMAGE,
+        type: UPLOADIMAGE,
         data: data
     }
 }
 
-export const addImage = (data) => {
+export const addImageToUndo = (info) => {
     return {
         type: ADDIMAGE,
-        data: data
+        info: info
+    }
+}
+
+export const addLikeStatusToUndo = (info) => {
+    return {
+        type: ADDLIKE,
+        info: info
     }
 }
 
@@ -33,8 +41,28 @@ export const undo = () => {
     }
 }
 
+export const redo = () => {
+    return {
+        type: REDO
+    }
+}
+
 export const clearUndo = () => {
     return {
         type: CLEARUNDO
+    }
+}
+
+export const clearRedo = () => {
+    return {
+        type: CLEARREDO
+    }
+}
+
+export const changeLike = (info) => {
+    return {
+        type: CHANGELIKE,
+        status: info.status,
+        id: info.id
     }
 }

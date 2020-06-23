@@ -950,7 +950,7 @@ ul {
 #profilePicture {
     display: inline-block;
     padding: 2vw;
-    margin-left: 8vw;
+    margin-left: 3.5vw;
 }
 #profilePicture button {
     margin: 1vw;
@@ -962,7 +962,6 @@ ul {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
 } 
 #profilePicture input {
@@ -979,4 +978,12 @@ ul {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+}
+.like-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.8em;
+    background-color: rgb(40, 40, 40);
+    color: white;
 }

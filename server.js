@@ -83,12 +83,31 @@ app.post('/addUser', upload.single('myfile'), function (req, res, next) {
             else sendUser(req.query.user, res);
         }
         else {
+            newDoc.posts = [];
             db.collection('users').insertOne(newDoc, (err, result) => {
                 if (err) return console.log(err);
                 res.send(result);
             });
         }
     });
+});
+
+app.post('/changeLike', (req, res) => {
+    let postObj = {
+        "posts": req.query.id
+    }
+    if (req.query.status === "Unlike") {
+        db.collection('users').updateOne({"name": req.query.user}, {$addToSet: postObj}, (err, result) => {
+            if (err) return console.log(err);
+            res.send(result);
+        });
+    }
+    else {
+        db.collection('users').updateOne({"name": req.query.user}, {$pull: postObj}, (err, result) => {
+            if (err) return console.log(err);
+            res.send(result);
+        });
+    }
 });
 
 app.get('/', (req, res) => {
@@ -143,4 +162,11 @@ app.get('/givePostData', (req, res) => {
 
 app.get('/getUser', (req, res) => {
     sendUser(req.query.user, res);
+});
+
+app.get('/checkLike', (req, res) => {
+    db.collection('users').find({"name": req.query.user, "posts": req.query.id}).toArray((err, result) => {
+        if (err) return console.log(err);
+        res.send(result);
+    });
 });

@@ -12,14 +12,15 @@ function Posts () {
                 const tempComponents = response.map(element => {
                     let conditionalData = {
                         img: null,
-                        height: '8vw'
+                        height: '9vw'
                     };
                     if (element.img.data !== null) {
                         conditionalData.img = 'data:image/png;base64,' + element.img.data;
-                        conditionalData.height = '22vw';
+                        conditionalData.height = '24.7vw';
                     }
                     return (<SinglePost
                         key={element._id}
+                        id={element._id}
                         user={element.name}
                         content={element.content}
                         imgData={conditionalData}
