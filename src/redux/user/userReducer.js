@@ -1,4 +1,5 @@
-import { LOG_IN, LOG_OUT, UPLOADIMAGE, ADDIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDLIKE } from "./userTypes";
+import { LOG_IN, LOG_OUT, UPLOADIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDUNDO } from "./userTypes";
+import { inverseActions } from "./userAction";
 
 const initialState = {
     user: '',
@@ -38,6 +39,16 @@ const handleLikeChange = (action, state) => {
     }
 }
 
+const handleActionInverse = (action, state) => {
+    if (action.type === CHANGELIKE) {
+        const postsAfterChange = handleLikeChange(action, state);
+        return {
+            ...state, 
+            posts: postsAfterChange
+        }
+    }
+}
+
 const userReducer = (state = initialState, action) => {
     let newUndoData = state.undoData;
     let newRedoData = state.redoData;
@@ -61,14 +72,8 @@ const userReducer = (state = initialState, action) => {
             ...state, 
             imgData: action.data
         }
-        case ADDIMAGE:
-            newUndoData.push({type: action.info.type, data: action.info.data})
-            return {
-                ...state,
-                undoData: newUndoData
-            }
-        case ADDLIKE:
-            newUndoData.push({type: action.info.type, id: action.info.id, status: action.info.status})
+        case ADDUNDO: 
+            newUndoData.push(action.prevState);
             return {
                 ...state,
                 undoData: newUndoData
@@ -81,67 +86,59 @@ const userReducer = (state = initialState, action) => {
             }
         case UNDO:
             if (newUndoData.length > 0) {
-                const lastData = newUndoData[newUndoData.length - 1];
+                const prevData = newUndoData[newUndoData.length - 1];
                 newUndoData.pop();
-                switch(lastData.type) {
-                    case UPLOADIMAGE: 
-                        let formData = new FormData();
-                        formData.append("myfile", b64toBlob(lastData.data), "image.png");
-                        postObject.body = formData;
-                        fetch(postUrl, postObject)
-                            .catch(function(error) {
-                                console.log(error);
-                            });
-                        newRedoData.push({ type: UPLOADIMAGE, data: state.imgData });
-                        return {
-                            ...state,
-                            undoData: newUndoData,
-                            redoData: newRedoData,
-                            imgData: lastData.data
-                        }
-                    case CHANGELIKE: 
-                        const postsAfterChange = handleLikeChange(lastData, state);
-                        const inverseStatus = lastData.status === "Like" ? "Unlike" : "Like";
-                        newRedoData.push({ type: lastData.type, id: lastData.id, status: inverseStatus });
-                        return {
-                            ...state,
-                            undoData: newUndoData,
-                            redoData: newRedoData,
-                            posts: postsAfterChange
-                        }
+                if (prevData.type) {
+                    const newState = handleActionInverse(prevData, state);
+                    newRedoData.push(inverseActions(prevData));
+                    return newState;
+                }
+                const currentState = JSON.parse(JSON.stringify(state));
+                delete currentState.undoData;
+                delete currentState.redoData;
+                newRedoData.push(currentState);
+                let formDataToChangeImage = new FormData();
+                formDataToChangeImage.append("myfile", b64toBlob(prevData.imgData), "image.png");
+                postObject.body = formDataToChangeImage;
+                fetch(postUrl, postObject)
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                return {
+                    ...state,
+                    undoData: newUndoData,
+                    redoData: newRedoData,
+                    imgData: prevData.imgData,
+                    posts: prevData.posts
                 }
             } 
             else return state;
         case REDO:
             if (newRedoData.length > 0) {
-                const lastData = newRedoData[newRedoData.length - 1];
+                const prevData = newRedoData[newRedoData.length - 1];
                 newRedoData.pop();
-                switch(lastData.type) {
-                    case UPLOADIMAGE: 
-                        let formData = new FormData();
-                        formData.append("myfile", b64toBlob(lastData.data), "image.png");
-                        postObject.body = formData;
-                        fetch(postUrl, postObject)
-                            .catch(function(error) {
-                                console.log(error);
-                            });
-                        newUndoData.push({ type: UPLOADIMAGE, data: state.imgData });
-                        return {
-                            ...state,
-                            undoData: newUndoData,
-                            redoData: newRedoData,
-                            imgData: lastData.data
-                        }
-                    case CHANGELIKE: 
-                        const postsAfterChange = handleLikeChange(lastData, state);
-                        const inverseStatus = lastData.status === "Like" ? "Unlike" : "Like";
-                        newUndoData.push({ type: lastData.type, id: lastData.id, status: inverseStatus });
-                        return {
-                            ...state,
-                            undoData: newUndoData,
-                            redoData: newRedoData,
-                            posts: postsAfterChange
-                        }
+                if (prevData.type) {
+                    const newState = handleActionInverse(prevData, state);
+                    newUndoData.push(inverseActions(prevData));
+                    return newState;
+                }
+                const currentState = JSON.parse(JSON.stringify(state));
+                delete currentState.undoData;
+                delete currentState.redoData;
+                newUndoData.push(currentState);
+                let formDataToChangeImage = new FormData();
+                formDataToChangeImage.append("myfile", b64toBlob(prevData.imgData), "image.png");
+                postObject.body = formDataToChangeImage;
+                fetch(postUrl, postObject)
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                return {
+                    ...state,
+                    undoData: newUndoData,
+                    redoData: newRedoData,
+                    imgData: prevData.imgData,
+                    posts: prevData.posts
                 }
             }
             else return state;

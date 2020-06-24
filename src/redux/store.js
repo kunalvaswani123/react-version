@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import userReducer from "./user/userReducer";
 import searchReducer from "./search/searchReducer";
-import { UPLOADIMAGE, CHANGELIKE } from "./user/userTypes"; 
-import { addImageToUndo, clearRedo, addLikeStatusToUndo } from "./index";
+import { UNDO, REDO, CLEARREDO, CLEARUNDO, ADDUNDO } from "./user/userTypes"; 
+import { clearRedo, addToUndo, inverseActions } from "./index";
 
 const saveToLocalStorage = (state) => {
     try {
@@ -29,18 +29,19 @@ const loadFromLocalStorage = () => {
     }
 }
 
+const actionsNotToBeAdded = [UNDO, REDO, CLEARUNDO, CLEARREDO, ADDUNDO];
+
 const undoMiddleware = store => next => action => {
-    const currentState = store.getState();
-    switch (action.type) {
-        case UPLOADIMAGE:
-            store.dispatch(clearRedo());
-            store.dispatch(addImageToUndo({ type: action.type, data: currentState.log.imgData }));
-            break;
-        case CHANGELIKE:
-            store.dispatch(clearRedo());
-            const inverseStatus = action.status === "Like" ? "Unlike" : "Like";
-            store.dispatch(addLikeStatusToUndo({ type: action.type, id: action.id, status: inverseStatus }))
-            break;
+    const currentState = JSON.parse(JSON.stringify(store.getState().log));
+    delete currentState.undoData;
+    delete currentState.redoData;
+    const canAdd = actionsNotToBeAdded.indexOf(action.type) === -1;
+    if (canAdd) {
+        store.dispatch(clearRedo());
+        if (action.inverse)
+            store.dispatch(addToUndo(inverseActions(action)));
+        else
+            store.dispatch(addToUndo(currentState));
     }
     next(action);
 }

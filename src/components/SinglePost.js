@@ -65,7 +65,6 @@ function SinglePost (props) {
     }, [postsToCheckChange]);
 
     useDidUpdateEffect(() => {
-        console.log(like, changePostsState);
         if (changePostsState == true) {
             dispatch(changeLike({ status: like.value, id: props.id }));
             setChangePostsChange(false);

@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, UPLOADIMAGE, ADDIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDLIKE } from "./userTypes";
+import { LOG_IN, LOG_OUT, UPLOADIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDUNDO } from "./userTypes";
 
 export const logIn = (info) => {
     return {
@@ -21,17 +21,10 @@ export const uploadImage = (data) => {
     }
 }
 
-export const addImageToUndo = (info) => {
+export const addToUndo = (prevState) => {
     return {
-        type: ADDIMAGE,
-        info: info
-    }
-}
-
-export const addLikeStatusToUndo = (info) => {
-    return {
-        type: ADDLIKE,
-        info: info
+        type: ADDUNDO,
+        prevState: prevState
     }
 }
 
@@ -63,6 +56,18 @@ export const changeLike = (info) => {
     return {
         type: CHANGELIKE,
         status: info.status,
-        id: info.id
+        id: info.id,
+        inverse: true
+    }
+}
+
+export const inverseActions = (action) => {
+    if (action.type == CHANGELIKE) {
+        return {
+            type: CHANGELIKE,
+            status: action.status === "Like" ? "Unlike" : "Like",
+            id: action.id,
+            inverse: true
+        }
     }
 }
