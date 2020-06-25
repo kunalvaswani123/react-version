@@ -4,8 +4,8 @@ import { logOut } from "../redux";
 import { Link } from "react-router-dom";
 
 function UserDetail () {
-    const user = useSelector(state => state.log.user);
-    const imgData = useSelector(state => state.log.imgData);
+    const user = useSelector(state => state.userState.userData.user);
+    const imgData = useSelector(state => state.userState.userData.imgData);
     const dispatch = useDispatch();
     const handleSubmit = () => {
         dispatch(logOut());

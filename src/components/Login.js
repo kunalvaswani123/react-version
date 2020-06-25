@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import logo from '../images/fb.jpg';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logIn, uploadImage } from "../redux";
 import { fetchUser } from "./service";
 
 function Login () {
-    const state = useSelector(state => state);
     const dispatch = useDispatch();
     const [user, setUser] = useState('');
     const handleSubmit = () => {

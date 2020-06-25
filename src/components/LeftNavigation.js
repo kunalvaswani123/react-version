@@ -6,8 +6,8 @@ import Group from "./Group";
 import { useSelector } from "react-redux";
 
 function LeftNavigation () {
-    const user = useSelector(state => state.log.user);
-    const imgData = useSelector(state => state.log.imgData);
+    const user = useSelector(state => state.userState.userData.user);
+    const imgData = useSelector(state => state.userState.userData.imgData);
     const shortcutComponents = shortcutData.map(element => <Shortcut key={element.id} act={element.act} add={element.add} />);
     const [groups, setGroups] = useState([]);
     const [loaded, setLoaded] = useState(null);

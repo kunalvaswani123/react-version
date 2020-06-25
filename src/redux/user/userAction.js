@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, UPLOADIMAGE, UNDO, REDO, CLEARUNDO, CLEARREDO, CHANGELIKE, ADDUNDO } from "./userTypes";
+import { LOG_IN, LOG_OUT, UPLOADIMAGE, UNDO, REDO, START, CHANGELIKE, CHANGESTATE } from "./userTypes";
 
 export const logIn = (info) => {
     return {
@@ -21,13 +21,6 @@ export const uploadImage = (data) => {
     }
 }
 
-export const addToUndo = (prevState) => {
-    return {
-        type: ADDUNDO,
-        prevState: prevState
-    }
-}
-
 export const undo = () => {
     return {
         type: UNDO
@@ -40,15 +33,9 @@ export const redo = () => {
     }
 }
 
-export const clearUndo = () => {
+export const start = () => {
     return {
-        type: CLEARUNDO
-    }
-}
-
-export const clearRedo = () => {
-    return {
-        type: CLEARREDO
+        type: START
     }
 }
 
@@ -69,5 +56,12 @@ export const inverseActions = (action) => {
             id: action.id,
             inverse: true
         }
+    }
+}
+
+export const changeState = (state) => {
+    return {
+        type: CHANGESTATE,
+        state: state
     }
 }

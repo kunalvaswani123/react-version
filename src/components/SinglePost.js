@@ -4,12 +4,12 @@ import { fetchUser } from "./service";
 import { changeLike } from "../redux"; 
 
 function SinglePost (props) {
-    const user = useSelector(state => state.log.user);
-    const posts = useSelector(state => state.log.posts);
-    const postsToCheckChange = useSelector(state => JSON.stringify(state.log.posts));
+    const user = useSelector(state => state.userState.userData.user);
+    const posts = useSelector(state => state.userState.userData.posts);
+    const postsToCheckChange = useSelector(state => JSON.stringify(state.userState.userData.posts));
     const dispatch = useDispatch();
     const [mountRef, setMountRef] = useState(false);
-    const imgData = useSelector(state => state.log.imgData);
+    const imgData = useSelector(state => state.userState.userData.imgData);
     const [userImage, setUserImage] = useState('data:image/png;base64,' + imgData);
     const [like, setLike] = useState({value: "Like", color: "white"});
     const [changePostsState, setChangePostsChange] = useState(false);

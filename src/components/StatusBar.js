@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { search, modal } from "../redux";
 
 function StatusBar () {
-    const user = useSelector(state => state.log.user);
-    const imgData = useSelector(state => state.log.imgData);
+    const user = useSelector(state => state.userState.userData.user);
+    const imgData = useSelector(state => state.userState.userData.imgData);
     const postForm = useRef(null);
     const resetPostForm = useRef(null);
     const modalId = useRef(null);

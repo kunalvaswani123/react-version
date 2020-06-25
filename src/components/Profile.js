@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPostData, fetchUser } from "./service";
 import SinglePost from "./SinglePost";
-import { uploadImage, undo, redo, clearUndo, clearRedo } from "../redux"; 
+import { uploadImage, undo, redo, start } from "../redux"; 
 
 function Profile () {
     const dispatch = useDispatch();
@@ -10,13 +10,12 @@ function Profile () {
     const profileSrc= useRef(null);
     const resetPostForm = useRef(null);
     const fileForm = useRef(null);
-    const user = useSelector(state => state.log.user);
-    const imgData = useSelector(state => state.log.imgData);
+    const user = useSelector(state => state.userState.userData.user);
+    const imgData = useSelector(state => state.userState.userData.imgData);
     const [components, setComponents] = useState([]);
     const [userImage, setUserImage] = useState('data:image/png;base64,' + imgData);
     useEffect(() => {
-        dispatch(clearUndo());
-        dispatch(clearRedo());
+        dispatch(start());
     }, [])
     useEffect(() => {
         setUserImage('data:image/png;base64,' + imgData);

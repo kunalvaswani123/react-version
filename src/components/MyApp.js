@@ -7,7 +7,7 @@ import store from "../redux/store";
 import Profile from "./Profile";
 
 function MyApp () {
-    const currentUser = store.getState().log.user;
+    const currentUser = store.getState().userState.userData.user;
     const condition = currentUser !== null && currentUser !== '';
     return (
         <Provider store={store}>

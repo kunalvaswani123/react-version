@@ -1,8 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import userReducer from "./user/userReducer";
 import searchReducer from "./search/searchReducer";
-import { UNDO, REDO, CLEARREDO, CLEARUNDO, ADDUNDO } from "./user/userTypes"; 
-import { clearRedo, addToUndo, inverseActions } from "./index";
+import { inverseActions, changeState } from "./index";
+import { makeUndoMiddleware } from "./middlewares";
+import { UNDO, REDO, START } from "./user/userTypes";
+import { handleDatabaseChange } from "./service";
 
 const saveToLocalStorage = (state) => {
     try {
@@ -20,7 +22,6 @@ const loadFromLocalStorage = () => {
         if (serializedState === null) return undefined;
         const jsonState = JSON.parse(serializedState)
         jsonState.search.modal = false;
-        jsonState.log.undoData = [];
         return jsonState;
     }
     catch(e) {
@@ -29,24 +30,21 @@ const loadFromLocalStorage = () => {
     }
 }
 
-const actionsNotToBeAdded = [UNDO, REDO, CLEARUNDO, CLEARREDO, ADDUNDO];
-
-const undoMiddleware = store => next => action => {
-    const currentState = JSON.parse(JSON.stringify(store.getState().log));
-    delete currentState.undoData;
-    delete currentState.redoData;
-    const canAdd = actionsNotToBeAdded.indexOf(action.type) === -1;
-    if (canAdd) {
-        store.dispatch(clearRedo());
-        if (action.inverse)
-            store.dispatch(addToUndo(inverseActions(action)));
-        else
-            store.dispatch(addToUndo(currentState));
-    }
-    next(action);
+const functionsRequired = {
+    inverseActions: inverseActions,
+    handleDatabaseChange: handleDatabaseChange
 }
 
-const rootReducer = combineReducers({log: userReducer, search: searchReducer});
+const actionsRequired = {
+    UNDO: UNDO,
+    REDO: REDO,
+    START: START,
+    changeState: changeState
+}
+
+const undoMiddleware = makeUndoMiddleware(functionsRequired, actionsRequired);
+
+const rootReducer = combineReducers({userState: userReducer, search: searchReducer});
 const persistedState = loadFromLocalStorage();
 const store = createStore(rootReducer, persistedState, applyMiddleware(undoMiddleware));
 
