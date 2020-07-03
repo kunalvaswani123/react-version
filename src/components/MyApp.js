@@ -4,7 +4,17 @@ import Home from "./Home";
 import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../redux/store";
-import Profile from "./Profile";
+import loadable from '@loadable/component'
+
+const ProfileLoadableComponent = loadable(() => import('./Profile.js'), {
+    fallback: <Loading />
+});
+
+function Loading () {
+    return (
+        <div>Loading...</div>
+    );
+}
 
 function MyApp () {
     const currentUser = store.getState().userState.userData.user;
@@ -30,7 +40,7 @@ function MyApp () {
                         <Route 
                             path="/profile" 
                             render={() => (
-                                <Profile /> 
+                                <ProfileLoadableComponent /> 
                             )} 
                         />
                     </Switch>

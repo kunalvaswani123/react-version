@@ -1,22 +1,23 @@
 import React from "react";
+import { HomeButtonSvg, WatchButtonSvg, HutButtonSvg, PeopleButtonSvg, GridButtonSvg } from "../buttons";
 
 function MiddleButtons () {
     return (
         <div className="middle-buttons">
 			<div className="container" id="active">
-				<button className="btn"><i className="fa fa-home"></i></button>
+                <HomeButtonSvg />
+            </div>
+			<div className="container">
+                <WatchButtonSvg/>
 			</div>
 			<div className="container">
-				<button className="btn"><i className="fa fa-bars"></i></button>
+                <HutButtonSvg />
 			</div>
 			<div className="container">
-				<button className="btn"><i className="fa fa-trash"></i></button>
-			</div>
-			<div className="container">
-				<button className="btn"><i className="fa fa-close"></i></button>
+                <PeopleButtonSvg />
 			</div>
 			<div className="container" id="last">
-				<button className="btn"><i className="fa fa-folder"></i></button>
+                <GridButtonSvg />
 			</div>
 		</div>
     );

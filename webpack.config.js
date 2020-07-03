@@ -7,7 +7,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
-        publicPath: '/'
+        publicPath: '/dist/'
     },
     devServer: {
         historyApiFallback: true,

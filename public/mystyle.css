@@ -152,11 +152,10 @@ body {
 .middle-buttons .container .btn {
 	transition: 0.1s;
 	float: left;
-	height: 3.5vw;
+	height: 1.8vw;
 	width: 7.45vw;
-	margin-top: 0.2vw;
+	margin-top: 1vw;
 	font-size: 2rem;
-	color: white;
 	border-radius: 0.5vw;
 	background-color: rgb(35, 35, 35);
 	border: none;
@@ -166,14 +165,14 @@ body {
 	background-color: rgb(60, 60, 60);
 }
 #active {
-	color: RoyalBlue;
+	fill: #2d88ff;
 	border-bottom: solid;
-	border-color: RoyalBlue;
+	border-color: #2d88ff;
 	border-radius: 0vw;
 	border-width: 0.2vw;
 }
 #active .btn {
-	color: RoyalBlue;
+	color: #2d88ff;
 }
 #last {
 	margin-right: 0vw;

@@ -17,7 +17,8 @@ export const logOut = () => {
 export const uploadImage = (data) => {
     return {
         type: UPLOADIMAGE,
-        data: data
+        data: data,
+        supportsUndo: true
     }
 }
 
@@ -44,7 +45,8 @@ export const changeLike = (info) => {
         type: CHANGELIKE,
         status: info.status,
         id: info.id,
-        inverse: true
+        inverse: true,
+        supportsUndo: true
     }
 }
 
@@ -54,7 +56,8 @@ export const inverseActions = (action) => {
             type: CHANGELIKE,
             status: action.status === "Like" ? "Unlike" : "Like",
             id: action.id,
-            inverse: true
+            inverse: true,
+            supportsUndo: true
         }
     }
 }

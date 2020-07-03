@@ -1,26 +1,26 @@
 export const userData = [
     {
         id: 1,
-        user: 'User1'
+        user: 'Kunal Vaswani'
     },
     {
         id: 2,
-        user: 'User2'
+        user: 'Anant Agarwal'
     },
     {
         id: 3,
-        user: 'User3'
+        user: 'Shubhankar Bhagwat'
     },
     {
         id: 4,
-        user: 'User4'
+        user: 'Arnav Juneja'
     },
     {
         id: 5,
-        user: 'User5'
+        user: 'Akshay Goindani'
     },
     {
         id: 6,
-        user: 'User6'
+        user: 'Sanchit Saini'
     }
 ];

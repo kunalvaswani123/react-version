@@ -89,10 +89,12 @@ export const makeUndoMiddleware = (functionsRequired, actionsRequired) => {
         }
         else {
             currentArchitecture.redoData = [];
-            if (action.inverse)
-                currentArchitecture.undoData.push({isAction: true, action: inverseActions(action)});
-            else
-                currentArchitecture.undoData.push({isAction: false, state: store.getState()});
+            if (action.supportsUndo) {
+                if (action.inverse)
+                    currentArchitecture.undoData.push({isAction: true, action: inverseActions(action)});
+                else
+                    currentArchitecture.undoData.push({isAction: false, state: store.getState()});
+            }
         }
         localStorage.setItem('architectureUndoRedo', JSON.stringify(currentArchitecture));
         next(action);

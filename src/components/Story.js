@@ -3,6 +3,7 @@ import EachStory from "./EachStory";
 import { storyData } from "./data/storyData";
 
 function Story () {
+    const [modalUser, setModalUser] = useState('User');
     const [current, setCurrent] = useState(6);
     const [modal, setModal] = useState(false);
     const [styleModal, setStyleModal] = useState('none');
@@ -17,7 +18,8 @@ function Story () {
             key={element.id}
             ctr={element.id} 
             time={element.time} 
-            storyImg={element.image} 
+            storyImg={element.image}
+            userPosted={element.user} 
         />
     );
     const handleOn = (current) => {
@@ -31,6 +33,7 @@ function Story () {
     useEffect(() => {
         if (modal === true && current <= 5) {
             handleOn();
+            setModalUser(storyData[current - 1].user);
             const storySrc = modalId.current.querySelectorAll(".story-image")[0];
             storySrc.src = storyData[current - 1].image;
             progress.current.classList.remove("progress-value");
@@ -63,7 +66,7 @@ function Story () {
                 <div className="modal-body">
                     <img src={require("../images/story.jpg").default} className="story-image" alt="storyimage" />
                     <img src={require("../images/user.png").default} className="user-image" alt="userimage" />
-                    <span className="story-username">User</span>
+                    <span className="story-username">{modalUser}</span>
                     <div className="progress">
                         <div id="progress-bar" ref={progress}></div>
                     </div>

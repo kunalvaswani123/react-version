@@ -15,7 +15,7 @@ function RightNavigation () {
                 <div className="headlis"><a href="#home"><strong>Birthdays</strong></a></div>
                 <div className="group">
                     <button className="btn" id="cake"><i className="fa fa-birthday-cake"></i></button>
-                    <span className="act"><strong>User9</strong> have their birthdays today</span>
+                    <span className="act"><strong>Kunal</strong> have their birthdays today</span>
                 </div>
             </div>
             <hr />

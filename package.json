@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.10.2",
+    "@loadable/component": "^5.13.1",
     "cors": "^2.8.5",
     "file-saver": "^2.0.2",
     "mongoose": "^5.9.15",
